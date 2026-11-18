@@ -712,29 +712,7 @@ const Shop = {
     const fechaHora = new Date().toLocaleString('es-CO', { dateStyle: 'short', timeStyle: 'short' });
     const ordenRef = 'CR-' + String(seq).padStart(4, '0');
 
-                       const msg = [
-      `*NUEVO PEDIDO · CRUSTÉ*`,
-      `*Orden:* #${ordenRef}`,
-      `*Fecha:* ${fechaHora}`,
-      `----------------------------`,
-      `*Pedido:*`,
-      ...L.map(l => `• ${l.q} x ${l.p.name} — ${Utils.money(l.u)} c/u = *${Utils.money(l.sub)}*`),
-      `----------------------------`,
-      `*TOTAL: ${Utils.money(total)}*`,
-      ``,
-      `*Datos de entrega:*`,
-      `*Nombre:* ${d.nombre}`,
-      `*Teléfono:* ${d.telefono}`,
-      `*Dirección:* ${d.direccion}`,
-      `*Método de pago:* ${d.pago}`,
-      `*Notas:* ${d.notas || 'Sin notas'}`,
-      ``,
-      `_Gracias por elegir cocina artesanal y sostenible._`
-    ].join('\n');
-
-
-    const url = 'https://whatsapp.com' + CONFIG.whatsapp + '&text=' + encodeURIComponent(msg);
-    window.location.href = url;
+                       const msg =
 
 
 

@@ -712,10 +712,10 @@ const Shop = {
     const fechaHora = new Date().toLocaleString('es-CO', { dateStyle: 'short', timeStyle: 'short' });
     const ordenRef = 'CR-' + String(seq).padStart(4, '0');
 
-           const E = {
-      pan: String.fromCodePoint(0x1F950),
-      recibo: String.fromCodePoint(0x1F9FE),
-      fecha: String.fromCodePoint(0x1F5D3, 0xFE0F),
+               const E = {
+      cafe: String.fromCodePoint(0x2615),
+      nota: String.fromCodePoint(0x1F4CB),
+      fecha: String.fromCodePoint(0x1F552),
       plato: String.fromCodePoint(0x1F37D, 0xFE0F),
       dinero: String.fromCodePoint(0x1F4B0),
       pin: String.fromCodePoint(0x1F4CD),
@@ -723,18 +723,18 @@ const Shop = {
       tel: String.fromCodePoint(0x1F4F1),
       casa: String.fromCodePoint(0x1F3E0),
       pago: String.fromCodePoint(0x1F4B3),
-      nota: String.fromCodePoint(0x1F4DD),
+      lapiz: String.fromCodePoint(0x270F, 0xFE0F),
       brillo: String.fromCodePoint(0x2728)
     };
 
     const msg = [
-      `${E.pan} *NUEVO PEDIDO · CRUSTÉ*`,
-      `${E.recibo} *Orden:* #${ordenRef}`,
+      `${E.cafe} *NUEVO PEDIDO - CRUSTÉ*`,
+      `${E.nota} *Orden:* #${ordenRef}`,
       `${E.fecha} *Fecha:* ${fechaHora}`,
-      `────────────────────`,
+      `--------------------`,
       `${E.plato} *Detalle del pedido:*`,
-      ...L.map(l => `• ${l.q}x ${l.p.name} — ${Utils.money(l.u)} c/u = *${Utils.money(l.sub)}*`),
-      `────────────────────`,
+      ...L.map(l => `- ${l.q}x ${l.p.name} (${Utils.money(l.u)} c/u) = *${Utils.money(l.sub)}*`),
+      `--------------------`,
       `${E.dinero} *TOTAL A PAGAR: ${Utils.money(total)}*`,
       ``,
       `${E.pin} *Datos de entrega:*`,
@@ -742,15 +742,14 @@ const Shop = {
       `${E.tel} *Teléfono:* ${d.telefono}`,
       `${E.casa} *Dirección:* ${d.direccion}`,
       `${E.pago} *Pago:* ${d.pago}`,
-      `${E.nota} *Notas:* ${d.notas || 'Sin indicaciones adicionales'}`,
+      `${E.lapiz} *Notas:* ${d.notas || 'Sin indicaciones adicionales'}`,
       ``,
       `${E.brillo} _Gracias por elegir cocina artesanal y sostenible._`
     ].join('\n');
 
-
-
-    const url = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
+    const url = `https://whatsapp.com{CONFIG.whatsapp}&text=${encodeURIComponent(msg)}`;
     window.location.href = url;
+
 
     this.cart.clear(); form.reset();
     this.$('cartMain').hidden = true; this.$('cartDone').hidden = false;

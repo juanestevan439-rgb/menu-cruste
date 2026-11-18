@@ -743,7 +743,7 @@ const Shop = {
 
 
     const url = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
-    if (!window.open(url, '_blank')) location.href = url;
+    window.location.href = url;
 
     this.cart.clear(); form.reset();
     this.$('cartMain').hidden = true; this.$('cartDone').hidden = false;

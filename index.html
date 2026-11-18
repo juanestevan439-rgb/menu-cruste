@@ -719,6 +719,13 @@ const Shop = {
       nota: String.fromCodePoint(0x1F4DD),
       brillo: String.fromCodePoint(0x2728)
     };
+    let seq = 1;
+    try {
+      seq = (parseInt(localStorage.getItem('cruste_seq') || '0', 10) + 1);
+      localStorage.setItem('cruste_seq', String(seq));
+    } catch (e) {}
+    const fechaHora = new Date().toLocaleString('es-CO', { dateStyle: 'short', timeStyle: 'short' });
+    const ordenRef = 'CR-' + String(seq).padStart(4, '0');
 
         const msg = [
       `*NUEVO PEDIDO - CRUSTE*`,

@@ -712,25 +712,26 @@ const Shop = {
     const fechaHora = new Date().toLocaleString('es-CO', { dateStyle: 'short', timeStyle: 'short' });
     const ordenRef = 'CR-' + String(seq).padStart(4, '0');
 
-                   const msg = [
-      `*NUEVO PEDIDO - CRUSTÉ*`,
-      `- *Orden:* #${ordenRef}`,
-      `- *Fecha:* ${fechaHora}`,
+                       const msg = [
+      `*NUEVO PEDIDO · CRUSTÉ*`,
+      `*Orden:* #${ordenRef}`,
+      `*Fecha:* ${fechaHora}`,
       `----------------------------`,
-      `*DETALLE DEL PEDIDO:*`,
-      ...L.map(l => `• ${l.q}x ${l.p.name} (${Utils.money(l.u)} c/u) = *${Utils.money(l.sub)}*`),
+      `*Pedido:*`,
+      ...L.map(l => `• ${l.q} x ${l.p.name} — ${Utils.money(l.u)} c/u = *${Utils.money(l.sub)}*`),
       `----------------------------`,
-      `*TOTAL A PAGAR: ${Utils.money(total)}*`,
+      `*TOTAL: ${Utils.money(total)}*`,
       ``,
-      `*DATOS DE ENTREGA:*`,
-      `- *Cliente:* ${d.nombre}`,
-      `- *Teléfono:* ${d.telefono}`,
-      `- *Dirección:* ${d.direccion}`,
-      `- *Pago:* ${d.pago}`,
-      `- *Notas:* ${d.notas || 'Sin indicaciones adicionales'}`,
+      `*Datos de entrega:*`,
+      `*Nombre:* ${d.nombre}`,
+      `*Teléfono:* ${d.telefono}`,
+      `*Dirección:* ${d.direccion}`,
+      `*Método de pago:* ${d.pago}`,
+      `*Notas:* ${d.notas || 'Sin notas'}`,
       ``,
       `_Gracias por elegir cocina artesanal y sostenible._`
     ].join('\n');
+
 
     const url = 'https://whatsapp.com' + CONFIG.whatsapp + '&text=' + encodeURIComponent(msg);
     window.location.href = url;

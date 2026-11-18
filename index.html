@@ -214,7 +214,7 @@ body.has-cart footer{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))
 <header class="hero"><div class="wrap">
   <button type="button" class="back" id="backHome">← Inicio</button>
   <button type="button" class="back back--right" id="goDelivery" hidden>Pedir a domicilio</button>
-  <img class="logo" src="https://i.ibb.co/qLnYJys7/CRUST-5.png" alt="Logo Crusté" width="220" height="130" decoding="async" onerror="this.hidden=true">
+  <img class="logo" src="https://i.ibb.co/s95JTdmp/CRUST-7.png" alt="Logo Crusté" width="220" height="130" decoding="async" onerror="this.hidden=true">
   <h1>CRUSTÉ</h1>
   <p>Panadería artesanal, pastelería y cocina sostenible</p>
   <p class="notice" id="notice" hidden></p>
@@ -704,16 +704,38 @@ const Shop = {
     try {   // guardado en segundo plano (Apps Script); text/plain evita el preflight CORS
       fetch(CONFIG.appsScriptUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) }).catch(() => {});
     } catch (e) {}
+    let seq = 1;
+    try {
+      seq = (parseInt(localStorage.getItem('cruste_seq') || '0', 10) + 1);
+      localStorage.setItem('cruste_seq', String(seq));
+    } catch (e) {}
+    const fechaHora = new Date().toLocaleString('es-CO', { dateStyle: 'short', timeStyle: 'short' });
+    const ordenRef = 'CR-' + String(seq).padStart(4, '0');
 
-    const msg = [
-      '*Nuevo pedido · CRUSTÉ*', '',
-      '*Pedido:*', ...L.map(l => `• ${l.q} x ${l.p.name} — ${Utils.money(l.u)} c/u = ${Utils.money(l.sub)}`), '',
-      `*TOTAL: ${Utils.money(total)}*`, '',
-      '*Datos de entrega*', `Nombre: ${d.nombre}`, `Teléfono: ${d.telefono}`, `Dirección: ${d.direccion}`,
-      `Método de pago: ${d.pago}`, `Notas: ${d.notas || 'Sin notas'}`
+                   const msg = [
+      `*NUEVO PEDIDO - CRUSTÉ*`,
+      `- *Orden:* #${ordenRef}`,
+      `- *Fecha:* ${fechaHora}`,
+      `----------------------------`,
+      `*DETALLE DEL PEDIDO:*`,
+      ...L.map(l => `• ${l.q}x ${l.p.name} (${Utils.money(l.u)} c/u) = *${Utils.money(l.sub)}*`),
+      `----------------------------`,
+      `*TOTAL A PAGAR: ${Utils.money(total)}*`,
+      ``,
+      `*DATOS DE ENTREGA:*`,
+      `- *Cliente:* ${d.nombre}`,
+      `- *Teléfono:* ${d.telefono}`,
+      `- *Dirección:* ${d.direccion}`,
+      `- *Pago:* ${d.pago}`,
+      `- *Notas:* ${d.notas || 'Sin indicaciones adicionales'}`,
+      ``,
+      `_Gracias por elegir cocina artesanal y sostenible._`
     ].join('\n');
-    const url = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
-    if (!window.open(url, '_blank')) location.href = url;
+
+    const url = 'https://whatsapp.com' + CONFIG.whatsapp + '&text=' + encodeURIComponent(msg);
+    window.location.href = url;
+
+
 
     this.cart.clear(); form.reset();
     this.$('cartMain').hidden = true; this.$('cartDone').hidden = false;

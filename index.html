@@ -705,30 +705,41 @@ const Shop = {
       fetch(CONFIG.appsScriptUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) }).catch(() => {});
     } catch (e) {}
 
-       const seq = (parseInt(localStorage.getItem('cruste_seq') || '0', 10) + 1);
-    localStorage.setItem('cruste_seq', seq);
-    const fechaHora = new Date().toLocaleString('es-CO', { dateStyle: 'short', timeStyle: 'short' });
-    const ordenRef = `CR-${String(seq).padStart(4, '0')}`;
+           const E = {
+      pan: String.fromCodePoint(0x1F950),
+      recibo: String.fromCodePoint(0x1F9FE),
+      fecha: String.fromCodePoint(0x1F5D3, 0xFE0F),
+      plato: String.fromCodePoint(0x1F37D, 0xFE0F),
+      dinero: String.fromCodePoint(0x1F4B0),
+      pin: String.fromCodePoint(0x1F4CD),
+      user: String.fromCodePoint(0x1F464),
+      tel: String.fromCodePoint(0x1F4F1),
+      casa: String.fromCodePoint(0x1F3E0),
+      pago: String.fromCodePoint(0x1F4B3),
+      nota: String.fromCodePoint(0x1F4DD),
+      brillo: String.fromCodePoint(0x2728)
+    };
 
     const msg = [
-      `\uD83E\uDD50 *NUEVO PEDIDO · CRUSTÉ*`,
-      `\uD83E\uDDFE *Orden:* #${ordenRef}`,
-      `\uD83D\uDDD3\uFE0F *Fecha:* ${fechaHora}`,
+      `${E.pan} *NUEVO PEDIDO · CRUSTÉ*`,
+      `${E.recibo} *Orden:* #${ordenRef}`,
+      `${E.fecha} *Fecha:* ${fechaHora}`,
       `────────────────────`,
-      `\uD83C\uDF7D\uFE0F *Detalle del pedido:*`,
+      `${E.plato} *Detalle del pedido:*`,
       ...L.map(l => `• ${l.q}x ${l.p.name} — ${Utils.money(l.u)} c/u = *${Utils.money(l.sub)}*`),
       `────────────────────`,
-      `\uD83D\uDCB0 *TOTAL A PAGAR: ${Utils.money(total)}*`,
+      `${E.dinero} *TOTAL A PAGAR: ${Utils.money(total)}*`,
       ``,
-      `\uD83D\uDCCD *Datos de entrega:*`,
-      `\uD83D\uDC64 *Cliente:* ${d.nombre}`,
-      `\uD83D\uDCF1 *Teléfono:* ${d.telefono}`,
-      `\uD83C\uDFE0 *Dirección:* ${d.direccion}`,
-      `\uD83D\uDCB3 *Pago:* ${d.pago}`,
-      `\uD83D\uDCDD *Notas:* ${d.notas || 'Sin indicaciones adicionales'}`,
+      `${E.pin} *Datos de entrega:*`,
+      `${E.user} *Cliente:* ${d.nombre}`,
+      `${E.tel} *Teléfono:* ${d.telefono}`,
+      `${E.casa} *Dirección:* ${d.direccion}`,
+      `${E.pago} *Pago:* ${d.pago}`,
+      `${E.nota} *Notas:* ${d.notas || 'Sin indicaciones adicionales'}`,
       ``,
-      `\u2728 _Gracias por elegir cocina artesanal y sostenible._`
+      `${E.brillo} _Gracias por elegir cocina artesanal y sostenible._`
     ].join('\n');
+
 
 
     const url = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;

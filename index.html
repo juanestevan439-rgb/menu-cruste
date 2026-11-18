@@ -720,30 +720,41 @@ const Shop = {
       brillo: String.fromCodePoint(0x2728)
     };
 
-    const msg = [
-      `${E.pan} *NUEVO PEDIDO · CRUSTÉ*`,
-      `${E.recibo} *Orden:* #${ordenRef}`,
-      `${E.fecha} *Fecha:* ${fechaHora}`,
-      `────────────────────`,
-      `${E.plato} *Detalle del pedido:*`,
-      ...L.map(l => `• ${l.q}x ${l.p.name} — ${Utils.money(l.u)} c/u = *${Utils.money(l.sub)}*`),
-      `────────────────────`,
-      `${E.dinero} *TOTAL A PAGAR: ${Utils.money(total)}*`,
+        const msg = [
+      `*NUEVO PEDIDO - CRUSTE*`,
+      `*Orden:* #${ordenRef}`,
+      `*Fecha:* ${fechaHora}`,
+      `----------------------------`,
+      `*Pedido:*`,
+      ...L.map(l => `- ${l.q} x ${l.p.name} (${Utils.money(l.u)} c/u) = *${Utils.money(l.sub)}*`),
+      `----------------------------`,
+      `*TOTAL: ${Utils.money(total)}*`,
       ``,
-      `${E.pin} *Datos de entrega:*`,
-      `${E.user} *Cliente:* ${d.nombre}`,
-      `${E.tel} *Teléfono:* ${d.telefono}`,
-      `${E.casa} *Dirección:* ${d.direccion}`,
-      `${E.pago} *Pago:* ${d.pago}`,
-      `${E.nota} *Notas:* ${d.notas || 'Sin indicaciones adicionales'}`,
+      `*Datos de entrega:*`,
+      `*Nombre:* ${d.nombre}`,
+      `*Telefono:* ${d.telefono}`,
+      `*Direccion:* ${d.direccion}`,
+      `*Metodo de pago:* ${d.pago}`,
+      `*Notas:* ${d.notas || 'Sin notas'}`,
       ``,
-      `${E.brillo} _Gracias por elegir cocina artesanal y sostenible._`
+      `_Gracias por elegir cocina artesanal y sostenible._`
     ].join('\n');
 
+    const url = 'https://whatsapp.com' + CONFIG.whatsapp + '&text=' + encodeURIComponent(msg);
+    const doneBox = this.$('cartDone');
+    let waLink = doneBox.querySelector('#waDirectBtn');
+    if (!waLink) {
+      waLink = document.createElement('a');
+      waLink.id = 'waDirectBtn';
+      waLink.target = '_blank';
+      waLink.rel = 'noopener noreferrer';
+      waLink.textContent = 'Abrir WhatsApp para confirmar';
+      waLink.style.cssText = 'display:block;margin:14px auto 8px;padding:12px 20px;background:#25D366;color:#fff;border-radius:999px;font-weight:700;text-decoration:none;text-align:center;';
+      doneBox.insertBefore(waLink, doneBox.querySelector('button'));
+    }
+    waLink.href = url;
+    setTimeout(() => { window.location.assign(url); }, 150);
 
-
-    const url = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
-    window.location.href = url;
 
     this.cart.clear(); form.reset();
     this.$('cartMain').hidden = true; this.$('cartDone').hidden = false;

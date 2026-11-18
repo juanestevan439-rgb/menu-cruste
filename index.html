@@ -555,17 +555,17 @@ const Config = {
       } catch (e) { fin(); }
     });
   },
-  read(rows){
+    read(rows){
     const map = {}; let ok = false;
     rows.forEach(r => { if (r && r.Parametro !== undefined){ ok = true; map[Utils.norm(r.Parametro)] = String(r.Valor ?? '').trim(); } });
-    if (!ok) return;                                           // CSV inválido → valores por defecto
+    if (!ok) return;
     this.deliveryOn = Utils.isYes(map.domicilios_activos);
     this.showCombos = !Utils.isNo(map.mostrar_combos);
-    this.showRecommended = !Utils.isNo(map.mostrar_recomendados);
+    this.showRecommended = !Utils.isNo(map.mostrar_recomendaciones ?? map.mostrar_recomendados);
     this.banner = map.mensaje_banner || '';
   },
   applyToData(){
-    if (!this.showCombos) Data.items = Data.items.filter(p => !/^combos?$/.test(Utils.norm(p.category)));
+    if (!this.showCombos) Data.items = Data.items.filter(p => !/combo/i.test(Utils.norm(p.category)));
   }
 };
 
